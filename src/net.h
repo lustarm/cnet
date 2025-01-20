@@ -18,7 +18,7 @@
 typedef struct {
     int server_fd;
 
-    char data[1024];
+    char buffer[1024];
 
     struct sockaddr_in server_addr;
     socklen_t addr_len;
@@ -29,6 +29,17 @@ typedef struct {
     bool err;
     char err_msg[512];
 } cnet_t;
+
+// Simple helpers
+inline static void send_str(cnet_t* c, const char* str)
+{
+    write(c->server_fd, str, strlen(str));
+}
+
+inline static void read_str(cnet_t* c)
+{
+    read(c->server_fd, c->buffer, sizeof(c->buffer));
+}
 
 void init_net(cnet_t*);
 

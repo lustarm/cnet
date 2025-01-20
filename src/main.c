@@ -1,4 +1,6 @@
 #include "clnt.h"
+#include "net.h"
+#include <unistd.h>
 
 int main() {
     client_t client;
@@ -6,11 +8,15 @@ int main() {
 
     while (client.running)
     {
-        LOG_ERROR("%s", client.err_msg);
-        sleep(5);
+        if(client.err) goto cleanup;
+        read_str(&client.net);
+        LOG_DEBUG("Read successfully: ", client.net.buffer);
     }
 
-error:
-    LOG_ERROR("%s", client.err_msg);
+cleanup:
+    // Redundent? I don't care.
+    client.running = false;
+    client.net.connected = false;
+    close(client.net.server_fd);
     return 0;
 }

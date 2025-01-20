@@ -10,8 +10,10 @@ inline static void check_hash(client_t* client)
     char hash[32];
     if (sha256_file("./src/main.c", hash) != 0)
     {
+        // This is weird but I like it
         client->err = true;
         strcpy(client->err_msg, "Failed to calculate hash");
+        LOG_ERROR(client->err_msg);
         return;
     }
 
@@ -32,9 +34,12 @@ inline static void check_hash(client_t* client)
 void init_client(client_t* client)
 {
     // Make sure we don't call twice
+    // and if we do die.
     assert(client->running == false);
     client->running = true;
 
+    // I guess we can just leave
+    // this here?
     strcpy(client->hash,
            "024b849af22b3177a4a120d15133efeb474bb05b13d56805fd8d7aecfae808e8");
     check_hash(client);
@@ -44,6 +49,7 @@ void init_client(client_t* client)
     {
         client->err = true;
         strcpy(client->err_msg, client->net.err_msg);
+        LOG_ERROR(client->err_msg);
         return;
     }
 }

@@ -8,9 +8,6 @@
 typedef struct {
     cnet_t net;
 
-    char buf[1024];
-    uint32_t buf_len;
-
     char hash[32];
 
     bool err;
