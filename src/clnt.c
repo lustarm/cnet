@@ -10,10 +10,7 @@ inline static void check_hash(client_t* client)
     char hash[32];
     if (sha256_file("./src/main.c", hash) != 0)
     {
-        // This is weird but I like it
         client->err = true;
-        strcpy(client->err_msg, "Failed to calculate hash");
-        LOG_ERROR(client->err_msg);
         return;
     }
 
@@ -36,7 +33,12 @@ void init_client(client_t* client)
     // Make sure we don't call twice
     // and if we do die.
     assert(client->running == false);
+
     client->running = true;
+    client->err = false;
+    client->net.connected = false;
+    client->net.err = false;
+    client->net.server_fd = 0;
 
     // I guess we can just leave
     // this here?
@@ -45,13 +47,18 @@ void init_client(client_t* client)
     check_hash(client);
 
     init_net(&client->net);
-    if(client->net.err)
+    if(client->net.err || !client->net.connected)
     {
         client->err = true;
-        strcpy(client->err_msg, client->net.err_msg);
-        LOG_ERROR(client->err_msg);
         return;
     }
 }
 
+void clean_client(client_t* client)
+{
+    client->running = false;
+    client->net.connected = false;
+    close(client->net.server_fd);
+    LOG_INFO("Cleaned up client, closing...");
+}
 

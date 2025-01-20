@@ -7,15 +7,12 @@
 
 typedef struct {
     cnet_t net;
-
     char hash[32];
-
     bool err;
-    char err_msg[256];
-
     bool running;
 }client_t;
 
-void init_client(client_t* client);
+void init_client(client_t*);
+void clean_client(client_t*);
 
 #endif

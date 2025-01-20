@@ -13,8 +13,7 @@ void init_net(cnet_t* net)
     if(net->server_fd < 0)
     {
         net->err = true;
-        strcpy(net->err_msg, "Failed to create socket");
-        LOG_ERROR(net->err_msg);
+        LOG_ERROR("Failed to create socket");
         return;
     }
 
@@ -24,8 +23,7 @@ void init_net(cnet_t* net)
     if(inet_pton(AF_INET, "127.0.0.1", &net->server_addr.sin_addr) <= 0)
     {
         net->err = true;
-        strcpy(net->err_msg, "Invalid address / Address not supported");
-        LOG_ERROR(net->err_msg);
+        LOG_ERROR("Invalid address / Address not supported");
         return;
     }
 
@@ -35,8 +33,7 @@ void init_net(cnet_t* net)
     if(net->status < 0)
     {
         net->err = true;
-        strcpy(net->err_msg, "Failed to connect to server");
-        // LOG_ERROR(net->err_msg);
+        LOG_ERROR("Failed to connect to server");
         return;
     }
 
