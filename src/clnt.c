@@ -56,6 +56,9 @@ void init_client(client_t* client)
 
 void clean_client(client_t* client)
 {
+    assert(client->running == true);
+    assert(client->net.connected == true);
+
     client->running = false;
     client->net.connected = false;
     close(client->net.server_fd);

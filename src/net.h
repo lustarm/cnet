@@ -19,6 +19,7 @@ typedef struct {
     int server_fd;
 
     char buffer[1024];
+    ssize_t len;
 
     struct sockaddr_in server_addr;
     socklen_t addr_len;
