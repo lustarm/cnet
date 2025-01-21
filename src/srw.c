@@ -53,6 +53,12 @@ bool check(cnet_t* net)
 
 void start_srw(client_t *client)
 {
+    // On func entry it should be connected
+    assert(client->net.connected);
+    // Auth
+    send_str(&client->net, "\x00\x00\x00\x01");
+    LOG_DEBUG("Sent authorization to server");
+
     while(true)
     {
         if(!client->net.connected)
@@ -77,9 +83,8 @@ void start_srw(client_t *client)
             LOG_INFO("Buffer is nothing skipping");
             continue;
         }
-
+        // For now just use this
         strip_newline(client->net.buffer, sizeof(client->net.buffer));
-
         LOG_DEBUG(client->net.buffer);
     }
 }

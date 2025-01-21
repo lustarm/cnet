@@ -7,6 +7,8 @@
 
 typedef struct {
     cnet_t net;
+
+    char name[16];
     char hash[32];
     bool err;
     bool running;
