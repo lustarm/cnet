@@ -2,7 +2,7 @@
 
 #include "net.h"
 
-void init_net(cnet_t* net)
+void start_net(cnet_t* net)
 {
     while(!net->connected)
     {

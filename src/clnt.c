@@ -46,12 +46,10 @@ void init_client(client_t* client)
            "024b849af22b3177a4a120d15133efeb474bb05b13d56805fd8d7aecfae808e8");
     check_hash(client);
 
-    init_net(&client->net);
+    start_net(&client->net);
+
     if(client->net.err || !client->net.connected)
-    {
         client->err = true;
-        return;
-    }
 }
 
 void clean_client(client_t* client)

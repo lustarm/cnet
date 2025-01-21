@@ -4,17 +4,17 @@
 
 #include "srw.h"
 #include "log.h"
+#include "net.h"
 
 // Simple helpers
 void send_str(cnet_t* c, const char* str)
 {
-    write(c->server_fd, str, strlen(str));
+    c -> len = write(c->server_fd, str, strlen(str));
 }
 
 void read_str(cnet_t* c)
 {
-    ssize_t b = read(c->server_fd, c->buffer, sizeof(c->buffer));
-    c->len = b;
+    c->len = read(c->server_fd, c->buffer, sizeof(c->buffer));
 }
 
 void strip_newline(char *buffer, size_t buffer_size)
@@ -35,7 +35,7 @@ bool check(cnet_t* net)
     {
         if (net->len == 0)
         {
-            LOG_INFO("Client disconnected, trying to connect");
+            LOG_INFO("Client disconnected");
             net->connected = false;
             return true;
         }
@@ -53,10 +53,16 @@ bool check(cnet_t* net)
 
 void start_srw(client_t *client)
 {
-    ssize_t s;
-
-    while(1)
+    while(true)
     {
+        if(!client->net.connected)
+        {
+            LOG_DEBUG("Client not connected; restarting client net");
+            sleep(5);
+            client->net.connected = false;
+            start_net(&client->net);
+        }
+
         assert(client != NULL);
         assert(client->net.connected == true);
         assert(client->net.err != true);
@@ -64,7 +70,7 @@ void start_srw(client_t *client)
         memset(client->net.buffer, 0, 1024);
 
         read_str(&client->net);
-        if(check(&client->net)) break;
+        if(check(&client->net)) continue;
 
         if(memcmp(client->net.buffer, "\n", strlen("\n")) == 0)
         {

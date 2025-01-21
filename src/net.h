@@ -30,6 +30,6 @@ typedef struct {
     bool err;
 } cnet_t;
 
-void init_net(cnet_t*);
+void start_net(cnet_t*);
 
 #endif
