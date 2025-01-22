@@ -2,7 +2,7 @@
 #pragma once
 
 #include "net.h"
-#include "clnt.h"
+#include "client.h"
 
 void start_srw(client_t*);
 

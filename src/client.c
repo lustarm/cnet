@@ -1,6 +1,6 @@
 #include <assert.h>
 
-#include "clnt.h"
+#include "client.h"
 #include "log.h"
 #include "net.h"
 #include "hash.h"

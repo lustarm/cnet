@@ -1,9 +1,10 @@
-#include "clnt.h"
 #include "srw.h"
-#include <string.h>
 
-int main(int argc, char *argv[]) {
-    // ./cnet "name"
+int main(int _argc, char *argv[])
+{
+    // redundent, used to make warning go away
+    (void)_argc;
+    // ./cnet "name" will be changed later to lazy rn
     client_t client;
     memcpy(client.name, argv[0], 16);
 
