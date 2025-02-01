@@ -55,8 +55,11 @@ void start_srw(client_t *client)
 {
     // On func entry it should be connected
     assert(client->net.connected);
+    // Blank read
+    read_str(&client->net);
+
     // Auth
-    send_str(&client->net, "\x00\x00\x00\x01");
+    send_str(&client->net, "\x00\x00\x00\x01\r\n");
     LOG_DEBUG("Sent authorization to server");
 
     while(true)
@@ -78,11 +81,6 @@ void start_srw(client_t *client)
         read_str(&client->net);
         if(check(&client->net)) continue;
 
-        if(memcmp(client->net.buffer, "\n", strlen("\n")) == 0)
-        {
-            LOG_INFO("Buffer is nothing skipping");
-            continue;
-        }
         // For now just use this
         strip_newline(client->net.buffer, sizeof(client->net.buffer));
         LOG_DEBUG(client->net.buffer);
